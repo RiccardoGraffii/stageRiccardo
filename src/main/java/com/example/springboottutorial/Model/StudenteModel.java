@@ -1,4 +1,4 @@
-package com.example.springboottutorial;
+package com.example.springboottutorial.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Studente {
+public class StudenteModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +16,9 @@ public class Studente {
     private String cognome;
 
 
-    public Studente() {}
+    public StudenteModel() {}
 
-    public Studente(int id, String nome, String cognome) {
+    public StudenteModel(int id, String nome, String cognome) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
