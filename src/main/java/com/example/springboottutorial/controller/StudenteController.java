@@ -2,13 +2,16 @@ package com.example.springboottutorial.controller;
 
 import com.example.springboottutorial.model.Studente;
 import com.example.springboottutorial.service.StudenteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/studenti")
 public class StudenteController {
+
 
     private final StudenteService studenteService;
 
@@ -17,18 +20,30 @@ public class StudenteController {
     }
 
     @GetMapping
-    public List<Studente> getAll() {
-        return studenteService.getAll();
+    public List<Studente> getAll(@RequestParam(required = false) String nome) {
+
+        if(nome == null){
+
+            return studenteService.getAll();
+
+        }else{
+            List<Studente> studenti = studenteService.getByName(nome);
+            if (studenti.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Studente non trovato");
+            }
+            return studenti;
+        }
+
     }
 
     @GetMapping("/{id}")
     public Studente getById(@PathVariable int id) {
-        Studente studente = studenteService.getById(id);
-        if (studente == null) {
-            throw new RuntimeException("Studente non trovato");
-        }
-        return studente;
+        return studenteService.getById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Studente non trovato"));
     }
+
+
+
 
     @PostMapping
     public Studente add(@RequestBody Studente studente) {
@@ -37,41 +52,12 @@ public class StudenteController {
 
     @PutMapping("/{id}")
     public Studente update(@PathVariable int id, @RequestBody Studente updated) {
-        Studente studente = studenteService.update(id, updated);
-        if (studente == null) {
-            throw new RuntimeException("Studente non trovato");
-        }
-        return studente;
+        return studenteService.update(id, updated).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Studente non trovato"));
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         studenteService.delete(id);
-    }
-
-    @RestController
-    @RequestMapping("/api/test")
-    public static class ControllerTest {
-
-        private final StudenteService studenteService;
-
-        public ControllerTest(StudenteService studenteService) {
-            this.studenteService = studenteService;
-        }
-
-        @GetMapping("/lista")
-        public List<Studente> listaStudenti() {
-            return studenteService.getAll();
-        }
-
-        @PostMapping("/aggiungi")
-        public Studente aggiungiStudente(@RequestBody Studente studente) {
-            return studenteService.add(studente);
-        }
-
-        @DeleteMapping("/elimina/{id}")
-        public void eliminaStudente(@PathVariable int id) {
-            studenteService.delete(id);
-        }
     }
 }

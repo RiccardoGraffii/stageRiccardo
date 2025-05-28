@@ -48,4 +48,6 @@ public class Studente {
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
+
+
 }

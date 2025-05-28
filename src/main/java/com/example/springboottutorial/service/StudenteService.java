@@ -5,6 +5,7 @@ import com.example.springboottutorial.repository.StudenteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudenteService {
@@ -19,22 +20,25 @@ public class StudenteService {
         return studenteRepository.findAll();
     }
 
-    public Studente getById(int id) {
-        return studenteRepository.findById(id).orElse(null);
+    public Optional<Studente> getById(int id) {
+        return studenteRepository.findById(id);
+    }
+
+    public List<Studente> getByName(String nome) {
+        return studenteRepository.findByNome(nome);
     }
 
     public Studente add(Studente studente) {
         return studenteRepository.save(studente);
     }
 
-    public Studente update(int id, Studente updated) {
-        Studente studente = studenteRepository.findById(id).orElse(null);
-        if (studente != null) {
-            studente.setNome(updated.getNome());
-            studente.setCognome(updated.getCognome());
-            return studenteRepository.save(studente);
-        }
-        return null;
+    public Optional<Studente> update(int id, Studente updated) {
+        return studenteRepository.findById(id)
+                .map(studente -> {
+                    studente.setNome(updated.getNome());
+                    studente.setCognome(updated.getCognome());
+                    return studenteRepository.save(studente);
+                });
     }
 
     public void delete(int id) {
