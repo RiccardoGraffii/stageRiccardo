@@ -1,6 +1,6 @@
 package com.example.springboottutorial.service;
 
-import com.example.springboottutorial.Model.StudenteModel;
+import com.example.springboottutorial.model.Studente;
 import com.example.springboottutorial.repository.StudenteRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +15,24 @@ public class StudenteService {
         this.studenteRepository = studenteRepository;
     }
 
-    public List<StudenteModel> getAll() {
+    public List<Studente> getAll() {
         return studenteRepository.findAll();
     }
 
-    public StudenteModel getById(int id) {
+    public Studente getById(int id) {
         return studenteRepository.findById(id).orElse(null);
     }
 
-    public StudenteModel add(StudenteModel studenteModel) {
-        return studenteRepository.save(studenteModel);
+    public Studente add(Studente studente) {
+        return studenteRepository.save(studente);
     }
 
-    public StudenteModel update(int id, StudenteModel updated) {
-        StudenteModel studenteModel = studenteRepository.findById(id).orElse(null);
-        if (studenteModel != null) {
-            studenteModel.setNome(updated.getNome());
-            studenteModel.setCognome(updated.getCognome());
-            return studenteRepository.save(studenteModel);
+    public Studente update(int id, Studente updated) {
+        Studente studente = studenteRepository.findById(id).orElse(null);
+        if (studente != null) {
+            studente.setNome(updated.getNome());
+            studente.setCognome(updated.getCognome());
+            return studenteRepository.save(studente);
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package com.example.springboottutorial.controller;
 
-import com.example.springboottutorial.Model.StudenteModel;
+import com.example.springboottutorial.model.Studente;
 import com.example.springboottutorial.service.StudenteService;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,40 +8,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/studenti")
-public class controllerAPIStudente {
+public class StudenteController {
 
     private final StudenteService studenteService;
 
-    public controllerAPIStudente(StudenteService studenteService) {
+    public StudenteController(StudenteService studenteService) {
         this.studenteService = studenteService;
     }
 
     @GetMapping
-    public List<StudenteModel> getAll() {
+    public List<Studente> getAll() {
         return studenteService.getAll();
     }
 
     @GetMapping("/{id}")
-    public StudenteModel getById(@PathVariable int id) {
-        StudenteModel studenteModel = studenteService.getById(id);
-        if (studenteModel == null) {
+    public Studente getById(@PathVariable int id) {
+        Studente studente = studenteService.getById(id);
+        if (studente == null) {
             throw new RuntimeException("Studente non trovato");
         }
-        return studenteModel;
+        return studente;
     }
 
     @PostMapping
-    public StudenteModel add(@RequestBody StudenteModel studenteModel) {
-        return studenteService.add(studenteModel);
+    public Studente add(@RequestBody Studente studente) {
+        return studenteService.add(studente);
     }
 
     @PutMapping("/{id}")
-    public StudenteModel update(@PathVariable int id, @RequestBody StudenteModel updated) {
-        StudenteModel studenteModel = studenteService.update(id, updated);
-        if (studenteModel == null) {
+    public Studente update(@PathVariable int id, @RequestBody Studente updated) {
+        Studente studente = studenteService.update(id, updated);
+        if (studente == null) {
             throw new RuntimeException("Studente non trovato");
         }
-        return studenteModel;
+        return studente;
     }
 
     @DeleteMapping("/{id}")
@@ -54,19 +54,19 @@ public class controllerAPIStudente {
     public static class ControllerTest {
 
         private final StudenteService studenteService;
-    
+
         public ControllerTest(StudenteService studenteService) {
             this.studenteService = studenteService;
         }
 
         @GetMapping("/lista")
-        public List<StudenteModel> listaStudenti() {
+        public List<Studente> listaStudenti() {
             return studenteService.getAll();
         }
 
         @PostMapping("/aggiungi")
-        public StudenteModel aggiungiStudente(@RequestBody StudenteModel studenteModel) {
-            return studenteService.add(studenteModel);
+        public Studente aggiungiStudente(@RequestBody Studente studente) {
+            return studenteService.add(studente);
         }
 
         @DeleteMapping("/elimina/{id}")
